@@ -25,4 +25,15 @@ RSpec.describe User, type: :model do
       expect(user).to_not be_valid
     end
   end
+  describe "user_file associations" do
+    let!(:user_with_files) { FactoryBot.create(:user_with_files) }
+    it "has many user files" do
+      relation = described_class.reflect_on_association(:user_files)
+      expect(relation.macro).to eq(:has_many)
+    end
+    it "destroys associated user files" do
+      expect{ user_with_files.destroy }.to change { UserFile.count }.by(-5)
+    end
+  end
+
 end
